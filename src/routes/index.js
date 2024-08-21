@@ -4,26 +4,44 @@ import Home from "../pages/Home";
 import Login from "../pages/Login";
 import ForgetPassword from "../pages/ForgetPassword";
 import Regitser from "../pages/Regitser";
-const router=createBrowserRouter([
+import AdminPanel from "../pages/AdminPanel";
+import AllUsers from "../pages/AllUsers";
+import Products from "../pages/Products";
+const router = createBrowserRouter([
     {
-        path:"/",
-        element: <App/>,
-        children : [
+        path: "/",
+        element: <App />,
+        children: [
             {
-                path:"",
-                element: <Home/>
+                path: "",
+                element: <Home />
             },
             {
-                path:"/login",
-                element: <Login/>
+                path: "/login",
+                element: <Login />
             },
             {
-                path:"/forget-password",
-                element: <ForgetPassword/>
+                path: "/forget-password",
+                element: <ForgetPassword />
             },
             {
-                path:"/register",
-                element: <Regitser/>
+                path: "/register",
+                element: <Regitser />
+            },
+            {
+                path: "/admin",
+                element: <AdminPanel />,
+                children: [
+
+                    {
+                        path: "allUsers",
+                        element: <AllUsers />
+                    },
+                    {
+                        path: "products",
+                        element: <Products />
+                    }
+                ]
             }
         ]
 
