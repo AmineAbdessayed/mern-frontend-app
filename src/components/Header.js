@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import { setUserDetails } from '../Store/userSlice';
+import ROLE from '../common/role';
 
 
 
@@ -59,21 +60,29 @@ const Header = () => {
 
           <div className='flex items-center gap-9 '>
           <div className='relative group flex justify-center '>
-
-            <div className='text-3xl cursor-pointer' onClick={()=>setMenuDisplay(prev=>!prev)}>
+           {
+            user?._id&&
+               <div className='text-3xl cursor-pointer' onClick={()=>setMenuDisplay(prev=>!prev)}>
               {user?.profilePic ?
                 (<img src={user.profilePic} alt={user.name} className='w-10 h-10 rounded-full' />) :
                 (<FaRegCircleUser />
                 )}
             </div>
+            }
+
+        
             {
-              menuDisplay&& 
+            menuDisplay&& 
 
             
             <div className='absolute bg-white bottom-0  top-11 h-fit p-3 shadow-lg rounded '>
               
                  <nav className='hover:bg-slate-100  whitespace-nowrap p-1'>
-                <Link to={"admin"} onClick={()=>setMenuDisplay(prev=>!prev)} >Admin Panel</Link>
+                  {
+                    user?.role===ROLE.ADMIN&&
+                  
+                <Link to={"admin/products"} onClick={()=>setMenuDisplay(prev=>!prev)} >Admin Panel</Link>
+                  }
               </nav>
             
              

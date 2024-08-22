@@ -1,12 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FaRegCircleUser } from "react-icons/fa6";
 import { useSelector } from 'react-redux';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import ROLE from '../common/role';
+
 
 
 const AdminPanel = () => {
 
+   const navigate=useNavigate()
     const user = useSelector(state => state?.user?.user)
+
+    useEffect(()=>{
+      if(user.role!==ROLE.ADMIN){
+        navigate("/")
+      }
+
+
+    },[user])
 
 
   return (
