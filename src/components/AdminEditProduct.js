@@ -3,30 +3,26 @@ import { IoMdClose } from "react-icons/io";
 import productCategory from '../helpers/productCategory'
 import { FaCloudUploadAlt } from "react-icons/fa";
 import uploadImage from "../helpers/uploadImage"
-import DisplayImage from '../components/displayImage';
 import { MdDelete } from "react-icons/md";
 import SummaryApi from '../common/index'
 import  {toast} from 'react-toastify';
+import DisplayImage from './displayImage';
 
-
-
-
-
-
-const UploadProduct = ({ onClose }) => {
+const AdminEditProduct = ({productData,onClose , fetchDataAgain}) => {
 
     const [openFullScreenImage, setopenFullScreenImage] = useState(false)
     const [fullscreenImage, setfullscreenImage] = useState("")
 
     const [fileUploadInput, setfileUploadInput] = useState()
     const [data, setdata] = useState({
-        productName: "",
-        brandName: "",
-        category: "",
-        productImage: "",
-        description: "",
-        price: "",
-        sellingPrice: ""
+        ...productData,
+        productName:productData?.productName ,
+        brandName:productData?.brandName ,
+        category:productData?.category ,
+        productImage: productData?.productImage||[],
+        description:productData?.description ,
+        price:productData?.price ,
+        sellingPrice:productData?.sellingPrice 
     })
 
     const handleOnchange = (e) => {
@@ -81,9 +77,9 @@ const UploadProduct = ({ onClose }) => {
     }
     const handleSubmit= async(e)=>{
         e.preventDefault()
-        const DataApi= await fetch(SummaryApi.uploadProduct.url,
+        const DataApi= await fetch(SummaryApi.editProduct.url,
             {
-                method:SummaryApi.uploadProduct.method,
+                method:SummaryApi.editProduct.method,
                 credentials:'include',
                 headers: {
                     "content-type":"application/json"
@@ -96,6 +92,7 @@ const UploadProduct = ({ onClose }) => {
         if(dataProduct.success){
             toast.success(dataProduct.message)
             onClose()
+            fetchDataAgain()
           }
           if(dataProduct.error){
             toast.error(dataProduct.message)
@@ -104,15 +101,14 @@ const UploadProduct = ({ onClose }) => {
         console.log("data : ----", dataProduct)
 
     }
-
-    return (
-
-        <div className='bg-slate-200 bg-opacity-35 fixed w-full h-full top-0 right-0 left-0 bottom-0 flex justify-center items-center'>
+  return (
+    
+    <div className='bg-slate-200 bg-opacity-35 fixed w-full h-full top-0 right-0 left-0 bottom-0 flex justify-center items-center'>
             <div className='bg-white p-4 rounded w-full  max-w-2xl h-full max-h-[75%] overflow-hidden'>
 
                 <div className='flex justify-between items-center'>
 
-                    <h2 className='font-bold text-lg'>Upload Product</h2>
+                    <h2 className='font-bold text-lg'>Edit Product</h2>
                     <div className='w-fit ml-auto hover:text-red-500 text-xl cursor-pointer' onClick={onClose}>
                         <IoMdClose />
                     </div>
@@ -226,8 +222,6 @@ const UploadProduct = ({ onClose }) => {
                               onChange={handleOnchange}
                               value={data.description}
 
-
-    
                       
                     />
 
@@ -249,10 +243,10 @@ const UploadProduct = ({ onClose }) => {
                 )
             }
         </div>
-
-
-
-    )
+    
+    
+    
+  )
 }
 
-export default UploadProduct
+export default AdminEditProduct

@@ -1,8 +1,31 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import UploadProduct from '../components/UploadProduct'
+import SummaryApi from '../common/index'
+import AdminProductCard from '../components/AdminProductCard'
+
+
 
 const Products = () => {
   const[uploadProduct,setuploadProduct]=useState(false)
+  const[products,setproducts]=useState([])
+
+  const getProducts=async()=>{
+
+    const dataRes= await fetch(SummaryApi.getProducts.url, {
+      method:SummaryApi.getProducts.method
+    })
+    const dataApi=await dataRes.json()
+    setproducts(dataApi.data || [])
+  }
+  useEffect(()=>{
+    getProducts()
+
+  },[])
+
+  console.log("products: ", products)
+
+
+
   return (
     <div>
 
@@ -15,6 +38,19 @@ const Products = () => {
       <UploadProduct onClose={()=>setuploadProduct(false)}/>
 
     } 
+    <div className='flex justify-center gap-5 py-6'>
+      {
+        products.map((product,index)=>{
+
+          return (
+            <AdminProductCard data={product} key={index} fetchDataAgain={getProducts}/>
+
+      
+          )
+        }
+
+      )}
+    </div>
     </div>
 
   )
