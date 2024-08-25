@@ -13,7 +13,7 @@ import  {toast} from 'react-toastify';
 
 
 
-const UploadProduct = ({ onClose }) => {
+const UploadProduct = ({ onClose , productData }) => {
 
     const [openFullScreenImage, setopenFullScreenImage] = useState(false)
     const [fullscreenImage, setfullscreenImage] = useState("")
@@ -96,6 +96,8 @@ const UploadProduct = ({ onClose }) => {
         if(dataProduct.success){
             toast.success(dataProduct.message)
             onClose()
+            productData()
+
           }
           if(dataProduct.error){
             toast.error(dataProduct.message)

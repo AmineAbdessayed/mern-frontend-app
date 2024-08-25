@@ -7,6 +7,7 @@ import Regitser from "../pages/Regitser";
 import AdminPanel from "../pages/AdminPanel";
 import AllUsers from "../pages/AllUsers";
 import Products from "../pages/Products";
+import Category from "../pages/Category";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path: "/register",
                 element: <Regitser />
+            },
+            {
+                path: "/categorie/:CategorieName",
+                element: <Category />
             },
             {
                 path: "/admin",

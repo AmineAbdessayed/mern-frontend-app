@@ -36,7 +36,12 @@ const SummaryApi= {
     editProduct: {
         url: `${BackendDomain}/editProduct`,
         method: "post"
+    },
+    getCategoryProduct: {
+        url: `${BackendDomain}/categoryProduct`,
+        method: "get"
     }
+    
     
 
 

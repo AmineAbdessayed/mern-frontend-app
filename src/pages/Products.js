@@ -35,10 +35,10 @@ const Products = () => {
     </div>
     {
       uploadProduct&&
-      <UploadProduct onClose={()=>setuploadProduct(false)}/>
+      <UploadProduct onClose={()=>setuploadProduct(false)} productData={getProducts}/>
 
     } 
-    <div className='flex justify-center gap-5 py-6'>
+    <div className='flex items-center flex-wrap gap-5 py-4 h-[calc(100vh-100px)] overflow-y-scroll'>
       {
         products.map((product,index)=>{
 
