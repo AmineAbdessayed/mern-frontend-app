@@ -7,7 +7,7 @@ const VerticalCardProduct = ({ category ,heading}) => {
 
     const [data, setData] = useState([])
     const [Loading, setLoading] = useState(false)
-    const loadingList = new Array(4).fill(null)
+    const loadingList = new Array(13).fill(null)
     const [scroll,setScroll]=useState(0)
     const scrollElement=useRef()
   
@@ -40,33 +40,62 @@ const VerticalCardProduct = ({ category ,heading}) => {
           <button><FaAngleRight  className='text-3xl bg-white rounded-full p-1 absolute right-0' onClick={ScrollRightFn}/> </button>
          
           {
-            
-            data.map((product,index)=>{
-              return (
-                <div className='w-full min-w-[280px] md:min-w-[200]  bg-white rounded-sm shadow row'>
-                <div className='bg-slate-200 h-56 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
-            
-                  <img src={product.productImage[0]} className='object-scale-down h-full hover:scale-125 transition-all mix-blend-multiply'/>
-        
-                </div>  
-                <div className='p-3'>
-                  <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
-                  <p className='font-semibold text-slate-500 capitalize'>{product?.category}</p>
-        
-                  <div className='flex gap-2'> 
-                    <p className='text-red-600 font-medium' >{displayDTCurrency(product?.sellingPrice)}</p>
-                    <p className='text-slate-500 line-through'>{displayDTCurrency(product?.price)}</p>
-  
+            Loading? (
+              loadingList.map((product,index)=>{
+                return (
+                  <div className='w-full min-w-[280px] md:min-w-[200]  bg-white rounded-sm shadow row'>
+                  <div className='bg-slate-200 h-56 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse '>
+              
+          
+                  </div>  
+                  <div className='p-3'>
+                    <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black p-1 w-full animate-pulse bg-slate-200 '></h2>
+                    <p className='font-semibold text-slate-500 capitalize p-1 w-full animate-pulse bg-slate-200 '></p>
+          
+                    <div className='flex gap-2'> 
+                      <p className='text-red-600 font-medium bg-slate-200  animate-pulse' ></p>
+                      <p className='text-slate-500 line-through p-1 w-full animate-pulse bg-slate-200 '></p>
+    
+                    </div>
+                    <button className='text-sm md:text-lg rounded-full text-white px-2 mt-2 p-1 w-full animate-pulse bg-slate-200 '></button>
+    
                   </div>
-                  <button className='text-sm md:text-lg bg-red-500 hover:bg-red-700 rounded-full text-white px-2 mt-2'>Add to Cart</button>
-  
+                  
                 </div>
-                
-              </div>
-        
-  
-              )
-            })
+          
+    
+                )
+              })            ): (
+
+              data.map((product,index)=>{
+                return (
+                  <div className='w-full min-w-[280px] md:min-w-[200]  bg-white rounded-sm shadow row'>
+                  <div className='bg-slate-200 h-56 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
+              
+                    <img src={product.productImage[0]} className='object-scale-down h-full hover:scale-125 transition-all mix-blend-multiply'/>
+          
+                  </div>  
+                  <div className='p-3'>
+                    <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 text-black'>{product?.productName}</h2>
+                    <p className='font-semibold text-slate-500 capitalize'>{product?.category}</p>
+          
+                    <div className='flex gap-2'> 
+                      <p className='text-red-600 font-medium' >{displayDTCurrency(product?.sellingPrice)}</p>
+                      <p className='text-slate-500 line-through'>{displayDTCurrency(product?.price)}</p>
+    
+                    </div>
+                    <button className='text-sm md:text-lg bg-red-500 hover:bg-red-700 rounded-full text-white px-2 mt-2'>Add to Cart</button>
+    
+                  </div>
+                  
+                </div>
+          
+    
+                )
+              })
+
+            )
+            
            }
        
   
