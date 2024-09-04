@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Logo from './Logo'
 import { GrSearch } from "react-icons/gr";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -9,11 +9,14 @@ import SummaryApi from '../common';
 import { toast } from 'react-toastify';
 import { setUserDetails } from '../Store/userSlice';
 import ROLE from '../common/role';
+import Context from '../context';
 
 
 
 
 const Header = () => {
+
+  const context=useContext(Context)
 
   const user = useSelector(state => state?.user?.user)
   console.log(user)
@@ -35,6 +38,7 @@ const Header = () => {
       toast.error(data.error)
     }
   }
+  console.log("context : '''''''''", context)
   return (
     <header className='h-16 shadow-md bg-white fixed w-full z-40'>
       <div className='h-full container mx-auto flex items-center px-4 justify-between'>
@@ -95,20 +99,32 @@ const Header = () => {
           </div>
 
 
-          <div className='text-2xl relative'>
-            <span><FaShoppingCart /> </span>
-            <div className='text-sm bg-red-600 rounded-full text-white p-1 w-5 flex items-center justify-center absolute -top-2 -right-4'>
-              <p>0</p>
+            {
+                          user?._id&& (
+                            <Link to={"/cart"}  className='text-2xl relative'>
+                                          <span><FaShoppingCart /> </span>
+
+
+                               <div className='text-sm bg-red-600 rounded-full text-white p-1 w-5 flex items-center justify-center absolute -top-2 -right-4'>
+              <p>{context.productCount}</p>
             </div>
+            </Link>
+                          )
+
+            }
+            
+         
 
 
-          </div>
 
           <div>
             {
               user?._id ? <Link to={"/login"} className='bg-red-600 px-3 py-1 rounded-full text-white hover:bg-red-700' onClick={handleLogout}>Logout</Link> : <Link to={"/login"} className='bg-red-600 px-3 py-1 rounded-full text-white hover:bg-red-700'>Login</Link>
 
             }
+
+<Link to={"/test"}>Yooo Amiene</Link>
+
 
           </div>
 

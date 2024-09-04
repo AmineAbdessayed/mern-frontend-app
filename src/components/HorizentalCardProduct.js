@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import FetchCategoryProduct from '../helpers/FetchCategoryProduct'
 import displayDTCurrency from '../helpers/displayDTCurrency'
 import { FaAngleRight } from "react-icons/fa";
 import { FaAngleLeft } from "react-icons/fa";
 import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
+import Context from '../context';
+
 
 const HorizentalCardProduct = ({ category ,heading}) => {
 
@@ -21,6 +23,15 @@ const HorizentalCardProduct = ({ category ,heading}) => {
     setLoading(false)
 
   }
+  const {fetchUserAddToCart}=useContext(Context)
+
+    const handleAddToCart=async(e,id)=>{
+
+      await addToCart(e,id)
+      await fetchUserAddToCart()
+
+    }
+
  useEffect(()=>{
   fetchData()
 
@@ -96,7 +107,7 @@ const HorizentalCardProduct = ({ category ,heading}) => {
 
                 </div>
                 <button className='text-sm md:text-lg bg-red-500 hover:bg-red-700 rounded-full text-white px-2 mt-2'
-                        onClick={(e)=>addToCart(e,product?._id)}>
+                        onClick={(e)=>handleAddToCart(e,product?._id)}>
                           
                           Add to Cart
                         </button>

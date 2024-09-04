@@ -30,7 +30,7 @@ const Login = () => {
     })
 
   }
-  const {fetchUsersDetails}=useContext(Context)
+  const {fetchUsersDetails,fetchUserAddToCart}=useContext(Context)
   const navigate=useNavigate()
 
   const handleSubmit=async(e)=>{
@@ -50,6 +50,7 @@ const Login = () => {
       console.log(dataAPI.message)
       toast.success(dataAPI.message)
       fetchUsersDetails()
+      fetchUserAddToCart()
       navigate('/')
 
     }

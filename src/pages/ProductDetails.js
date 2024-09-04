@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import SummaryApi from '../common'
 import { useParams } from 'react-router-dom'
 import { FaStar } from "react-icons/fa";
 import { FaStarHalf } from "react-icons/fa6";
 import displayDTCurrency from '../helpers/displayDTCurrency'
+import CategoryWiseProduct from '../components/CategoryWiseProduct'
 
 
 const ProductDetails = () => {
@@ -24,6 +25,12 @@ const ProductDetails = () => {
   )
   const params = useParams()
   const [activeImage, setactiveImage] = useState("")
+
+  const[zoomImageCoordinates,setzoomImageCoordinates]=useState({
+    x:0,
+    y:0
+  })
+  const [zoomImageNow,setzoomImageNow]=useState(false)
 
 
   const FetchProductDetails = async () => {
@@ -62,6 +69,26 @@ const ProductDetails = () => {
 
   }
 
+  const handleZoomImage=useCallback((e)=>{
+    setzoomImageNow(true)
+    const {left,top,width,height}=e.target.getBoundingClientRect()
+    console.log("zoom : ", left,top,width,height)
+
+    const x = (e.clientX - left) / width
+    const y = (e.clientY - top) / height
+    setzoomImageCoordinates({
+      x,
+      y
+    })
+
+  },[zoomImageCoordinates])
+
+  const leaveZoomImage=()=>{
+    setzoomImageNow(false)
+
+
+  }
+
   return (
 
     <div className='container mx-auto p-32 ml-10'>
@@ -69,8 +96,26 @@ const ProductDetails = () => {
 
         {/** Product Image */}
         <div className=' h-96 flex  flex-col lg:flex-row-reverse gap-4'>
-          <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200'>
-            <img src={activeImage} />
+          <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative p-2' onMouseMove={handleZoomImage} onMouseLeave={leaveZoomImage}>
+            <img src={activeImage} className='mix-blend-multiply' />
+            {/** Product Zoom */}
+
+             { 
+                 zoomImageNow&&
+                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[500px] bg-slate-200 p-1 -right-[510px] top-0  '>
+              <div 
+              className='w-full h-full min-h-[500px] min-w-[500px] scale-90'
+              style={{
+                backgroundImage: `url(${activeImage})`,
+                backgroundRepeat:'no-repeat',
+                backgroundPosition: `${zoomImageCoordinates.x * 100}% ${zoomImageCoordinates.y * 100}%`
+              }}>
+
+              </div>
+
+            </div>
+             }
+          
 
           </div>
 
@@ -132,7 +177,18 @@ const ProductDetails = () => {
 
         </div>
 
+
       </div>
+      {
+        data.category&&(
+            <div className='mt-44'>
+      <CategoryWiseProduct category={data?.category} heading={"Recomanded products"}/>
+
+      </div>
+        )
+      }
+    
+
 
     </div>
   )
