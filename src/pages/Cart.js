@@ -4,6 +4,8 @@ import Context from '../context'
 import displayDTCurrency from '../helpers/displayDTCurrency'
 import { MdDeleteSweep } from "react-icons/md";
 import { MdPayment } from "react-icons/md";
+import {loadStripe} from '@stripe/stripe-js';
+
 
 
 
@@ -35,7 +37,7 @@ const Cart = () => {
 
     }
   }
-  const handleLoading=async()=>{
+  const handleLoading = async () => {
     setLoading(true)
 
     await GetData()
@@ -61,7 +63,7 @@ const Cart = () => {
         _id: id,
         quantity: qte + 1
 
-      })  
+      })
     })
     console.log("DataApi", DataApi.status)
 
@@ -118,6 +120,40 @@ const Cart = () => {
   }
   const totalQty = data.reduce((prev, curr) => prev + curr.quantity, 0)
   const totalPrice = data.reduce((prev, curr) => prev + (curr.quantity * curr?.productId?.sellingPrice), 0)
+
+
+
+
+  const handlePayment = async () => {
+
+    const stripePromise = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+
+        const DataApi= await fetch(SummaryApi.payment.url,{
+      method:SummaryApi.payment.method,
+      credentials:'include',
+      headers:{
+        'content-type':'application/json',
+
+      },
+      body:JSON.stringify({
+        cartItem:data
+      })
+    })
+
+    const Response= await DataApi.json()
+
+    if(Response?.id){
+      stripePromise.redirectToCheckout({sessionId:Response.id})
+    }
+
+console.log("payment response", Response)
+  }
+
+
+
+
+
+
   return (
 
 
@@ -140,9 +176,9 @@ const Cart = () => {
         <div className='w-full max-w-3xl'>
           {
             loading ? (
-              loadingCart?.map((e,index) => {
+              loadingCart?.map((e, index) => {
                 return (
-                  <div key={e + "Add to cart Loading"+index} className='w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded '>
+                  <div key={e + "Add to cart Loading" + index} className='w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded '>
                   </div>
                 )
               })
@@ -192,28 +228,33 @@ const Cart = () => {
               </div>
 
             ) : (
-              <div className='h-36 bg-white'>
-                <h2 className='text-white bg-red-600 text-center text-lg'>Summary</h2>
-                <div className='flex items-center justify-between px-2 py-2'>
-                  <p>Quantity :</p>
-                  <p className='font-semibold'>{totalQty} </p>
-                </div>
-                <div className='flex items-center justify-between px-2 py-2'>
-                  <p className='underline'>Total :</p>
-                  <p className='underline text-lg'> <strong>{displayDTCurrency(totalPrice)}</strong></p>
 
-                </div>
-                <div className=''>
-                  <div className='bg-blue-700 text-white w-full p-2 flex justify-center text-center'>
-                  <p> <MdPayment className='text-sm' />   </p>
-                  <p>Payment </p>
+              data[0] && (
+                <div className='h-36 bg-white'>
+                  <h2 className='text-white bg-red-600 text-center text-lg'>Summary</h2>
+                  <div className='flex items-center justify-between px-2 py-2'>
+                    <p>Quantity :</p>
+                    <p className='font-semibold'>{totalQty} </p>
+                  </div>
+                  <div className='flex items-center justify-between px-2 py-2'>
+                    <p className='underline'>Total :</p>
+                    <p className='underline text-lg'> <strong>{displayDTCurrency(totalPrice)}</strong></p>
 
-                  
+                  </div>
+                  <div className=''>
+                    <div className='bg-blue-700 text-white w-full p-2 flex justify-center text-center cursor-pointer' onClick={handlePayment}>
+                      <p> <MdPayment className='text-sm' />   </p>
+                      <p>Payment </p>
+
+
                     </div>
+                  </div>
+
+
                 </div>
+              )
 
 
-              </div>
 
             )
           }

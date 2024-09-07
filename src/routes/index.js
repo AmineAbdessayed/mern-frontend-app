@@ -12,6 +12,8 @@ import ProductDetails from "../pages/ProductDetails";
 import Cart from "../pages/Cart";
 import Test from "../pages/test";
 import SearchProduct from "../pages/SearchProduct";
+import SuccessPage from "../pages/SuccessPage";
+import ErrorPage from "../pages/ErrorPage";
 const router = createBrowserRouter([
     {
         path: "/",
@@ -42,6 +44,17 @@ const router = createBrowserRouter([
                 element: <Cart /> 
 
             },
+            {
+                path: "success",
+                element: <SuccessPage /> 
+
+            },
+            {
+                path: "cancel",
+                element: <ErrorPage /> 
+
+            },
+
             {
                 path: "/product/:id",
                 element: <ProductDetails/> 
