@@ -59,7 +59,7 @@ const ProductDetails = () => {
     FetchProductDetails()
 
 
-  }, [])
+  }, [params])
   console.log("ID product : ", params)
   console.log("Data : ", data)
 

@@ -3,7 +3,7 @@ import Logo from './Logo'
 import { GrSearch } from "react-icons/gr";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { FaShoppingCart } from "react-icons/fa";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import SummaryApi from '../common';
 import { toast } from 'react-toastify';
@@ -17,6 +17,7 @@ import Context from '../context';
 const Header = () => {
 
   const context=useContext(Context)
+  const navigate=useNavigate()
 
   const user = useSelector(state => state?.user?.user)
   console.log(user)
@@ -38,6 +39,18 @@ const Header = () => {
       toast.error(data.error)
     }
   }
+   const HandleSearch=(e)=>{
+
+    const {value}=e.target
+
+    if(value){
+      navigate(`/search?q=${value}`)
+
+    } else{
+      navigate('/search')
+    }
+
+   }
   console.log("context : '''''''''", context)
   return (
     <header className='h-16 shadow-md bg-white fixed w-full z-40'>
@@ -54,7 +67,7 @@ const Header = () => {
 
 
         <div className=' hidden lg:flex items-center pl-2'>
-          <input type='text' placeholder='search product here' className='w-full outline-none ' />
+          <input type='text' placeholder='search product here' className='w-full outline-none' onChange={HandleSearch} />
           <div className=' text-lg min-w-[50px] h-8 bg-red-600 flex items-center justify-center rounded-r-full text-white'>
             <GrSearch />
 

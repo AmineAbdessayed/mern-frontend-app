@@ -1,50 +1,25 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
-import FetchCategoryProduct from '../helpers/FetchCategoryProduct'
+import React, { useContext } from 'react'
+import scrollTop from '../helpers/ScrollTop'
 import displayDTCurrency from '../helpers/displayDTCurrency'
-
-import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
-import scrollTop from '../helpers/ScrollTop';
+import { Link } from 'react-router-dom';
 
 
+const CardProductForSearch = ({Loading,data=[]}) => {
 
-const CategoryWiseProduct = ({ category ,heading}) => {
+  const loadingList = new Array(13).fill(null)
+  const {fetchUserAddToCart}=useContext(Context)
 
-    const [data, setData] = useState([])
-    const [Loading, setLoading] = useState(false)
-    const loadingList = new Array(13).fill(null)
-    const {fetchUserAddToCart}=useContext(Context)
+  const handleAddToCart=async(e,id)=>{
 
-    const handleAddToCart=async(e,id)=>{
+    await addToCart(e,id)
+    await fetchUserAddToCart()
 
-      await addToCart(e,id)
-      await fetchUserAddToCart()
+  }
 
-    }
-
-  
-    const fetchData=async()=>{
-      setLoading(true)
-      const categoryProduct = await FetchCategoryProduct(category)
-      setLoading(false)
-      setData(categoryProduct?.data)
-  
-    }
-   useEffect(()=>{
-    fetchData()
-  
-  
-   },[])
-  
-
-    return (
-      <div className='container mx-auto px-4 my-6 relative'>
-  
-           
-           <h2 className=' flex justify-center text-3xl font-semibold py-4'>{heading}</h2>
-
-          <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none transition-all mt-9' >
+  return (
+    <div className='grid grid-cols-[repeat(auto-fit,minmax(260px,300px))] justify-center gap-3 md:gap-4 overflow-x-scroll scrollbar-none transition-all mt-9'>
      
          
           {
@@ -77,10 +52,10 @@ const CategoryWiseProduct = ({ category ,heading}) => {
 
               data.map((product,index)=>{
                 return (
-                  <Link to={"/product/"+product?._id} className='w-full min-w-[280px] md:min-w-[200]  bg-white rounded-sm shadow row' onClick={scrollTop}>
+                  <Link to={"/product/"+product?._id} className='w-full min-w-[280px] md:min-w-[200px] max-w-[280px] bg-white rounded-sm shadow row' onClick={scrollTop}>
                   <div className='bg-slate-200 h-56 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
               
-                    <img src={product.productImage[0]} className='object-scale-down h-full hover:scale-125 transition-all mix-blend-multiply'/>
+                    <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-125 transition-all mix-blend-multiply'/>
           
                   </div>  
                   <div className='p-3'>
@@ -107,9 +82,7 @@ const CategoryWiseProduct = ({ category ,heading}) => {
            }
        
   
-          </div>
-      </div>
-    )
-  }
+          </div>  )
+}
 
-export default CategoryWiseProduct
+export default CardProductForSearch

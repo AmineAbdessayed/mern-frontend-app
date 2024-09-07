@@ -68,7 +68,19 @@ const SummaryApi= {
     DeleteCart: {
         url: `${BackendDomain}/DeleteCart`,
         method: "post"
+    },
+    searchProduct: {
+        url: `${BackendDomain}/search`,
+        method: "get"
+    },
+    filterProduct: {
+        url: `${BackendDomain}/filterProduct`,
+        method: "post"
     }
+
+
+
+    
     
     
     
