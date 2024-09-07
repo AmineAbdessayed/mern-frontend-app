@@ -1,10 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import SummaryApi from '../common'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaStar } from "react-icons/fa";
 import { FaStarHalf } from "react-icons/fa6";
 import displayDTCurrency from '../helpers/displayDTCurrency'
 import CategoryWiseProduct from '../components/CategoryWiseProduct'
+import addToCart from '../helpers/addToCart';
+import Context from '../context';
 
 
 const ProductDetails = () => {
@@ -23,6 +25,8 @@ const ProductDetails = () => {
 
   },
   )
+  const {fetchUserAddToCart}=useContext(Context)
+
   const params = useParams()
   const [activeImage, setactiveImage] = useState("")
 
@@ -85,9 +89,21 @@ const ProductDetails = () => {
 
   const leaveZoomImage=()=>{
     setzoomImageNow(false)
+ }
 
+ const handleAddtoCart=async(e,id)=>{
+  await addToCart(e,id)
+  fetchUserAddToCart()
 
-  }
+ }
+ const navigate=useNavigate()
+
+ const handleBuyProduct=async(e,id)=>{
+  await addToCart(e,id)
+  fetchUserAddToCart()
+  navigate("/cart")
+
+ }
 
   return (
 
@@ -97,12 +113,12 @@ const ProductDetails = () => {
         {/** Product Image */}
         <div className=' h-96 flex  flex-col lg:flex-row-reverse gap-4'>
           <div className='h-[300px] w-[300px] lg:h-96 lg:w-96 bg-slate-200 relative p-2' onMouseMove={handleZoomImage} onMouseLeave={leaveZoomImage}>
-            <img src={activeImage} className='mix-blend-multiply' />
+            <img src={activeImage} className='h-full w-full object-scale-down mix-blend-multiply' />
             {/** Product Zoom */}
 
              { 
                  zoomImageNow&&
-                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[500px] bg-slate-200 p-1 -right-[510px] top-0  '>
+                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[400px] bg-slate-200 p-1 -right-[510px] top-0  '>
               <div 
               className='w-full h-full min-h-[500px] min-w-[500px] scale-90'
               style={{
@@ -124,7 +140,7 @@ const ProductDetails = () => {
 
               data.productImage.map((image, index) => {
                 return (
-                  <div className='h-28 w-28 bg-slate-200 rounded'>
+                  <div className='h-20 w-20 bg-slate-200 rounded p-1'>
 
                     <img src={image} alt={image} className='h-full w-full object-scale-down mix-blend-multiply cursor-pointer' onMouseEnter={() => handleMouseSelection(image)} onClick={() => handleMouseSelection(image)} />
                   </div>
@@ -164,8 +180,8 @@ const ProductDetails = () => {
             <p className=' text-slate-500 line-through'>{displayDTCurrency(data.price)}</p>
           </div>
           <div className='flex gap-2'>
-            <button className='border-2 border-red-500 rounded px-3 py-1 min-w-[100px] text-red-600 hover:bg-red-600 hover:text-white'>Buy</button>
-            <button className='border-2 border-red-500 rounded px-3 py-1 min-w-[100px] text-white bg-red-600 hover:text-red-500 hover:bg-white  '>Add to Cart</button>
+            <button className='border-2 border-red-500 rounded px-3 py-1 min-w-[100px] text-red-600 hover:bg-red-600 hover:text-white' onClick={(e)=>handleBuyProduct(e,data?._id)}>Buy</button>
+            <button className='border-2 border-red-500 rounded px-3 py-1 min-w-[100px] text-white bg-red-600 hover:text-red-500 hover:bg-white  ' onClick={(e)=>handleAddtoCart(e,data?._id)}>Add to Cart</button>
           </div>
 
           <div className='p-1'>

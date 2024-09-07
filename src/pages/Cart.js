@@ -16,7 +16,6 @@ const Cart = () => {
   const loadingCart = new Array(context.productCount).fill(null)
 
   const GetData = async () => {
-    setLoading(true)
     const DataApi = await fetch(SummaryApi.viewProductsCart.url, {
       method: SummaryApi.viewProductsCart.method,
       credentials: 'include',
@@ -27,7 +26,6 @@ const Cart = () => {
     })
 
 
-    setLoading(false)
 
     const Response = await DataApi.json()
 
@@ -37,8 +35,17 @@ const Cart = () => {
 
     }
   }
+  const handleLoading=async()=>{
+    setLoading(true)
+
+    await GetData()
+    setLoading(false)
+
+
+  }
   useEffect(() => {
-    GetData()
+
+    handleLoading()
 
   }, [])
   console.log("_______________ data :: ", data)
@@ -54,7 +61,7 @@ const Cart = () => {
         _id: id,
         quantity: qte + 1
 
-      })
+      })  
     })
     console.log("DataApi", DataApi.status)
 
@@ -133,9 +140,9 @@ const Cart = () => {
         <div className='w-full max-w-3xl'>
           {
             loading ? (
-              loadingCart?.map(e => {
+              loadingCart?.map((e,index) => {
                 return (
-                  <div key={e + "Add to cart Loading"} className='w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded '>
+                  <div key={e + "Add to cart Loading"+index} className='w-full bg-slate-200 h-32 my-2 border border-slate-300 animate-pulse rounded '>
                   </div>
                 )
               })

@@ -77,7 +77,18 @@ const Category = () => {
 
 
    const [sortBy,setsortBy]=useState("")
-   console.log("sort :: ",sortBy)
+const handleSort=(e)=>{
+  const {value}=e.target
+  setsortBy(value)
+  if(value==="asc"){
+    setData(p=>p.sort((a,b)=>a.sellingPrice-b.sellingPrice))
+  }
+  if(value==="dsc"){
+    setData(p=>p.sort((a,b)=>b.sellingPrice-a.sellingPrice))
+  }
+
+}
+
   return (
     <div className='container mx-auto p-4'>
       <div className='hidden lg:grid grid-cols-[200px,1fr]'>
@@ -91,12 +102,12 @@ const Category = () => {
             </h3>
             <form className='text-sm flex flex-col gap-1 py-2'>
               <div>
-                <input type='radio' name='sortBy' value={"asc"} onChange={(e)=>setsortBy(e.target.value)}/>
+                <input type='radio' name='sortBy' value={"asc"} onChange={handleSort}/>
                 <label className='px-1'>Price - Low to High</label>
               </div>
 
               <div>
-                <input type='radio' name='sortBy' value={"dsc"} onChange={(e)=>setsortBy(e.target.value)}/>
+                <input type='radio' name='sortBy' value={"dsc"} onChange={handleSort}/>
                 <label className='px-1'>Price - High to Low</label>
               </div>
             </form>

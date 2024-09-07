@@ -7,8 +7,7 @@ import { Link } from 'react-router-dom';
 import addToCart from '../helpers/addToCart';
 import Context from '../context';
 
-
-const HorizentalCardProduct = ({ category ,heading}) => {
+ const HorizentalCardProduct = ({ category ,heading}) => {
 
   const [data, setData] = useState([])
   const [Loading, setLoading] = useState(false)
